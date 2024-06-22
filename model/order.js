@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema({
+    orderId: {
+        type: String,
+        unique: true,
+        required: true
+
+    },
     shipping: {
         name: String,
         email: String,
@@ -94,7 +100,8 @@ const orderSchema = mongoose.Schema({
     },
     orderDate: {
         type: String,
-        required: true
+        required: true,
+        default: () => new Date().toISOString().split('T')[0]
     },
     reminderSent: {
         type: Boolean,

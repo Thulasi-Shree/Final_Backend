@@ -5,13 +5,14 @@ const sendToken = require('../../utils/jwt');
 const ErrorHandler = require('../../utils/errorHandler');
 const { sendVerificationEmail } = require('../../utils/email');
 const SuccessHandler = require('../../utils/successHandler');
+const CryptoJS = require('crypto-js');
 
 exports.registerUser = catchAsyncError(async (req, res, next) => {
     const {
         name,
         lastName,
         email,
-        password,
+        password: encryptedPassword,
         phone,
         role,
         restaurantBranch,
@@ -38,7 +39,10 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
                 new ErrorHandler('Phone number is already registered', 400)
             );
         }
-        if (password.length < 8) {
+        const bytes = CryptoJS.AES.decrypt(encryptedPassword, 'ghjdjdgdhddjjdhgdcdghww#hsh536');
+        const decryptedPassword = bytes.toString(CryptoJS.enc.Utf8);
+
+        if (decryptedPassword.length < 8) {
             return next(new ErrorHandler('Password must be at least 8 characters long', 400));
           }
 
@@ -46,7 +50,7 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
             name,
             lastName,
             email,
-            password,
+            password: decryptedPassword,
             phone,
             role,
             restaurantBranch,

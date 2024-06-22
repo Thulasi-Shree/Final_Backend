@@ -34,6 +34,7 @@ const transaction = require('./routes/transaction')
 const location = require('./routes/location')
 const carousal = require('./routes/carousal')
 const category = require('./routes/category');
+const settings = require('./routes/settings');
 const multer = require('multer');
 
 
@@ -49,6 +50,7 @@ app.use('/api', order);
 app.use('/api', transaction);
 app.use('/api', location);
 app.use('/api', carousal);
+app.use('/api', settings);
 
 app.use(helmet()); 
 

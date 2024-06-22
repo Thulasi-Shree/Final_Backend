@@ -1,5 +1,6 @@
 const catchAsyncError = require('../../middlewares/catchAsyncError');
 const { startOfWeek, startOfMonth, subMonths, subYears } = require('date-fns');
+const generateOrderID = require('../../utils/generateOrderID');
 const Order = require('../../model/order');
 const Cart = require('../../model/cart');
 
@@ -31,7 +32,10 @@ exports.newOrder = catchAsyncError(async (req, res, next) => {
             orderDate
         } = req.body;
 
+        const orderId = generateOrderID();
+
         const order = await Order.create({
+            orderId,
             items,
             email,
             phone,
