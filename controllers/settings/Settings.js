@@ -5,13 +5,13 @@ const ErrorHandler = require('../../utils/errorHandler');
 
 // Update minimum delivery charge and tax amount
 const updateSettings = catchAsyncError(async (req, res, next) => {
-  const { minDeliveryCharge, taxAmount } = req.body;
+  const { minDeliveryCharge, taxAmount, deliveryChargePerKm } = req.body;
 
   try {
     let settings = await Settings.findOne();
 
     if (!settings) {
-      settings = new Settings({ minDeliveryCharge, taxAmount });
+      settings = new Settings({ minDeliveryCharge, taxAmount, deliveryChargePerKm });
     } else {
       settings.minDeliveryCharge = minDeliveryCharge;
       settings.taxAmount = taxAmount;
@@ -28,7 +28,7 @@ const updateSettings = catchAsyncError(async (req, res, next) => {
 });
 const getSettings = catchAsyncError(async (req, res, next) => {
     try {
-      const settings = await Settings.findOne();
+      const settings = await Settings.find();
   
       if (!settings) {
         return next(new ErrorHandler('Data not found', 404));

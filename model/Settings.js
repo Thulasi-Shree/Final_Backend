@@ -6,6 +6,11 @@ const SettingsSchema = new mongoose.Schema({
     required: true,
     default: 0
   },
+  deliveryChargePerKm: {
+    type: Number,
+    required: true,
+    default: 0
+  },
   taxAmount: {
     type: Number,
     required: true,

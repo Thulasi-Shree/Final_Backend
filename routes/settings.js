@@ -5,6 +5,6 @@ const settingsController = require('../controllers/settings/Settings')
 const { isAuthenticatedUser } = require('../middlewares/authenticate');
 
 router.put('/admin/settings', isAuthenticatedUser, settingsController.updateSettings); 
-router.get('/admin/settings/get', isAuthenticatedUser, settingsController.updateSettings); 
+router.get('/admin/settings/get', isAuthenticatedUser, settingsController.getSettings); 
 
 module.exports = router;
