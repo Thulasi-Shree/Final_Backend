@@ -15,6 +15,7 @@ const updateSettings = catchAsyncError(async (req, res, next) => {
     } else {
       settings.minDeliveryCharge = minDeliveryCharge;
       settings.taxAmount = taxAmount;
+      settings.deliveryChargePerKm = deliveryChargePerKm;
     }
 
     await settings.save();
