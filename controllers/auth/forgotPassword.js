@@ -2,6 +2,7 @@ const catchAsyncError = require('../../middlewares/catchAsyncError');
 const User = require('../../model/user'); 
 const { sendEmail} = require('../../utils/email');
 const ErrorHandler = require('../../utils/errorHandler');
+require('dotenv').config();
 
 exports.forgotPassword = catchAsyncError(async (req, res, next)=>{
         const user = await User.findOne({email: req.body.email})

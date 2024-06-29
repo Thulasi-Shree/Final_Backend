@@ -24,7 +24,18 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
         BASE_URL = `${req.protocol}://${req.get('host')} `;
     }
 
+    const validatePhoneNumber = (phone) => {
+        const phoneRegex = /^[0-9]{10,14}$/;  // Adjust regex according to your requirements
+        return phoneRegex.test(phone);
+    };
+    
+
     try {
+
+        if (!validatePhoneNumber(phone)) {
+            return next(new ErrorHandler('Invalid phone number format', 400));
+        }
+
         const existingUserByEmail = await User.findOne({ email });
         const existingUserByPhone = await User.findOne({ phone });
 

@@ -1,12 +1,10 @@
 const catchAsyncError = require('../../middlewares/catchAsyncError');
 const User = require('../../model/GuestUser');
-const sendToken = require('../../utils/jwt');
 const ErrorHandler = require('../../utils/errorHandler');
+const sendOtp = require('../../utils/sendMobileOtp');
 const { sendEmail } = require('../../utils/email');
 const crypto = require('crypto');
-const sendOtp = require('../../utils/sendMobileOtp');
-
-
+const CryptoJS = require('crypto-js');
 
 const generateHashedOTP = (otp) => {
   if (!otp) {
@@ -32,6 +30,7 @@ exports.verifyGuestUserOtp = catchAsyncError(async (req, res) => {
     if (!user || !user.otpHash) {
       throw new ErrorHandler('Invalid email/mobile or OTP not generated.', 400);
     }
+
     console.log('Recipient Mobile Number:', user.mobile);
     console.log('Recipient Mobile Number:', user.email);
 
@@ -39,7 +38,11 @@ exports.verifyGuestUserOtp = catchAsyncError(async (req, res) => {
       throw new ErrorHandler('Please provide the OTP for verification.', 400);
     }
 
-    const enteredHashedOTP = generateHashedOTP(enteredOtp);
+    // Decrypt the OTP
+    const bytes = CryptoJS.AES.decrypt(enteredOtp, 'ghjdjdgdhddjjdhgdcdghww#hsh536');
+    const decryptedOtp = bytes.toString(CryptoJS.enc.Utf8);
+
+    const enteredHashedOTP = generateHashedOTP(decryptedOtp);
     console.log('Stored Hashed OTP:', user.otpHash);
     console.log('Entered Hashed OTP:', enteredHashedOTP);
 
@@ -55,6 +58,7 @@ exports.verifyGuestUserOtp = catchAsyncError(async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to verify OTP.' });
   }
 });
+
 
 exports.sendGuestUserOtp = catchAsyncError(async (req, res) => {
   try {
