@@ -22,4 +22,6 @@ router.post('/calculate-distance', geoLocationController.calculateDistance);
 router.get('/user-location', geoLocationController.userLocation); 
 router.post('/geocode', geoLocationController.geoCoading); 
 
+router.get('/get-location-api-key', locationController.getApiKey); 
+
 module.exports = router;

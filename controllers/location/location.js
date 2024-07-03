@@ -3,6 +3,8 @@ const ErrorHandler = require('../../utils/errorHandler');
 const Location = require('../../model/Location');
 const Restaurant = require('../../model/restaurant')
 const catchAsyncError = require('../../middlewares/catchAsyncError');
+const crypto = require('crypto-js');
+require('dotenv').config();
 
 // Update a location by ID
 const updateLocation = catchAsyncError(async (req, res, next) => {
@@ -55,6 +57,18 @@ const saveUserLocation = catchAsyncError(async (req, res, next) => {
         return  next(new ErrorHandler(error.message, 500));
     }
 });
+const getApiKey = catchAsyncError(async (req, res, next) => {
+    try{
+        const apiKey1 = process.env.API_KEY;
+        const secretKey = 'ghjdjdgdhddjjdhgdcdghww#hsh536';
+    
+        const apiKey = crypto.AES.encrypt(apiKey1, secretKey).toString();
+        res.json({ apiKey });
+    }catch(error){
+        return  next(new ErrorHandler(error.message, 500));
+    }
+   
+  });
 
 // Get nearby restaurants
 const getNearbyRestaurants = catchAsyncError(async (req, res, next) => {
@@ -87,4 +101,8 @@ module.exports = {
     updateLocation,
     deleteLocation,
     getNearbyRestaurants,
+    getApiKey
 };
+
+
+
