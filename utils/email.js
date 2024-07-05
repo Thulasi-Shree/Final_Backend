@@ -57,7 +57,7 @@ const sendOrderConfirmationEmail = (email, order) => {
     }
     const emailContent = `
     <p>Dear ${order.shipping.name},</p>
-    <p>Thank you for your order! Your order ID is ${order._id}.</p>
+    <p>Thank you for your order! Your order ID is ${order.orderId}.</p>
     <p>Order Details:</p>
     <p>Name: ${order.shipping.name}</p>
     ${order.shipping.email ? `<p>Email: ${order.shipping.email}</p>` : ''}
@@ -113,7 +113,7 @@ const sendOrderConfirmationEmail = (email, order) => {
 const sendOrderStatusUpdateEmail = (email, order) => {
     const emailContent = `
         <p>Dear ${order.shipping.name},</p>
-        <p>Thank you for your order! Your order with order ID ${order._id} has been updated to ${order.orderStatus}.</p>
+        <p>Thank you for your order! Your order with order ID ${order.orderId} has been updated to ${order.orderStatus}.</p>
         <p>Order Details:</p>
         <p>Name: ${order.shipping.name}</p>        
     ${order.shipping.email ? `<p>Email: ${order.shipping.email}</p>` : ''}
