@@ -5,17 +5,18 @@ const ErrorHandler = require('../../utils/errorHandler');
 
 // Update minimum delivery charge and tax amount
 const updateSettings = catchAsyncError(async (req, res, next) => {
-  const { minDeliveryCharge, taxAmount, deliveryChargePerKm } = req.body;
+  const { minDeliveryCharge, taxAmount, deliveryChargePerKm, deliveryKm } = req.body;
 
   try {
     let settings = await Settings.findOne();
 
     if (!settings) {
-      settings = new Settings({ minDeliveryCharge, taxAmount, deliveryChargePerKm });
+      settings = new Settings({ minDeliveryCharge, taxAmount, deliveryChargePerKm, deliveryKm });
     } else {
       settings.minDeliveryCharge = minDeliveryCharge;
       settings.taxAmount = taxAmount;
       settings.deliveryChargePerKm = deliveryChargePerKm;
+      settings.deliveryKm = deliveryKm;
     }
 
     await settings.save();

@@ -69,13 +69,13 @@ router.route('/admin/order/:id').put(isAuthenticatedUser,  updateOrderStatus); /
 router.route('/admin/order/:id').delete(isAuthenticatedUser, authorizeRoles('admin'), deleteOrder);
 
 // Add Available Pickup Time Slots: POST /api/time-slot (Admin role required)
-router.route('/time-slot').post(addAvailablePickupTimeSlots); //isAuthenticatedUser, authorizeRoles('admin'), 
+router.route('/add/time-slot').post(addAvailablePickupTimeSlots); //isAuthenticatedUser, authorizeRoles('admin'), 
 
 // Update Time Slot by ID: PUT /api/time-slot (Admin role required)
-router.route('/time-slot').put(isAuthenticatedUser, authorizeRoles('admin'), updateTimeSlotById);
+router.route('/update/time-slot/:id').put(isAuthenticatedUser,  updateTimeSlotById);
 
 // Delete Time Slot by ID: DELETE /api/time-slot/:id (Admin role required)
-router.route('/time-slot/:id').delete(isAuthenticatedUser, authorizeRoles('admin'), deleteTimeSlotById);
+router.route('/time-slot/:id').delete(isAuthenticatedUser, deleteTimeSlotById);
 
 // Get Active Orders by Restaurant ID: GET /api/admin/orderHistory-active/:restaurantId (Admin role required)
 router.route('/admin/order/active').get(isAuthenticatedUser, getActiveOrdersByBranch);

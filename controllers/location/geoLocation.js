@@ -1,6 +1,7 @@
 
 const ErrorHandler = require('../../utils/errorHandler');
 const catchAsyncError = require('../../middlewares/catchAsyncError');
+const Restaurant = require('../../model/restaurant');
 const axios = require('axios');
 const geolib = require('geolib');
 
@@ -24,39 +25,78 @@ const userLocation = catchAsyncError(async  (req, res) => {
   });
   
   // Endpoint to calculate distance between user and restaurant
+  // const calculateDistance = catchAsyncError(async (req, res, next) => {
+  //   try {
+  //     // Get user's location from the request body
+  //     const { latitude: userLatitude, longitude: userLongitude } = req.body;
+  
+  //     // Get restaurant's location (assuming you have obtained it previously)
+  //   //   const restaurantLocation = { latitude: 12.8788, longitude: 80.2260 }; 
+  //   const restaurantLocation = { latitude: 12.8280321, longitude: 80.7109604 }; 
+
+  //   // const restaurantLocation = await axios.get(`https://api.geoapify.com/v1/geocode/search?text=38%20Upper%20Montagu%20Street%2C%20Westminster%20W1H%201LJ%2C%20United%20Kingdom&apiKey=31bc2a8978644190beec0a6f143266d3`);
+
+  //     // Check if the user location is provided in the request body
+  //     if (!userLatitude || !userLongitude) {
+  //       return res.status(400).json({ error: 'User location not provided in the request body' });
+  //     }
+  
+  //     // Calculate distance in meters
+  //     const distanceInMeters = geolib.getDistance(
+  //       { latitude: userLatitude, longitude: userLongitude }, 
+  //       restaurantLocation
+  //     );
+  
+  //     // Convert distance to kilometers
+  //     const distanceInKilometers = distanceInMeters / 1000;
+  
+  //     res.json({ distanceInMeters, distanceInKilometers });
+  //   } catch (error) {
+  //     console.error('Error calculating distance:', error.message);
+  //     res.status(500).json({ error: 'Internal Server Error' });
+  //   }
+  // });
+  
+  // module.exports = calculateDistance;
+
   const calculateDistance = catchAsyncError(async (req, res, next) => {
     try {
-      // Get user's location from the request body
-      const { latitude: userLatitude, longitude: userLongitude } = req.body;
+      const { latitude: userLatitude, longitude: userLongitude, restaurantId } = req.body;
   
-      // Get restaurant's location (assuming you have obtained it previously)
-    //   const restaurantLocation = { latitude: 12.8788, longitude: 80.2260 }; 
-    const restaurantLocation = { latitude: 12.8280321, longitude: 80.7109604 }; 
-
-    // const restaurantLocation = await axios.get(`https://api.geoapify.com/v1/geocode/search?text=38%20Upper%20Montagu%20Street%2C%20Westminster%20W1H%201LJ%2C%20United%20Kingdom&apiKey=31bc2a8978644190beec0a6f143266d3`);
-
-      // Check if the user location is provided in the request body
       if (!userLatitude || !userLongitude) {
         return res.status(400).json({ error: 'User location not provided in the request body' });
       }
   
-      // Calculate distance in meters
+      const restaurant = await Restaurant.findOne({ _id: restaurantId });
+  
+      if (!restaurant) {
+        return res.status(404).json({ error: 'Restaurant not found' });
+      }
+  
+      const restaurantLocation = {
+        latitude: restaurant.latitude, // Adjust as per your schema
+        longitude: restaurant.longitude // Adjust as per your schema
+      };
+  
       const distanceInMeters = geolib.getDistance(
-        { latitude: userLatitude, longitude: userLongitude }, 
+        { latitude: userLatitude, longitude: userLongitude },
         restaurantLocation
       );
   
-      // Convert distance to kilometers
       const distanceInKilometers = distanceInMeters / 1000;
   
       res.json({ distanceInMeters, distanceInKilometers });
     } catch (error) {
       console.error('Error calculating distance:', error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
+      if (!res.headersSent) {
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+      next(error);
     }
   });
   
-  module.exports = calculateDistance;
+
+
   const addressDatabase = {
     '1600 Amphitheatre Parkway, Mountain View, CA': { latitude: 37.422, longitude: -122.084 },
     '1 Infinite Loop, Cupertino, CA': { latitude: 37.3318, longitude: -122.0311 },

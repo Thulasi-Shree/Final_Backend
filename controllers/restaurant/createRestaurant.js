@@ -5,7 +5,7 @@ const SuccessHandler = require('../../utils/successHandler');
 
 const createRestaurant = catchAsyncError(async (req, res, next) => {
     try {
-        const { restaurantName, address, images, restaurantId, description, restaurantBranch, openingHours, cuisineTypeCategory, dietaryPreferenceCategory } = req.body;
+        const { restaurantName, address, images, restaurantId, description, restaurantBranch, openingHours, cuisineTypeCategory, dietaryPreferenceCategory, latitude, longitude } = req.body;
         const userId = req.user.id;
 
         // Create a new restaurant object
@@ -15,6 +15,8 @@ const createRestaurant = catchAsyncError(async (req, res, next) => {
             restaurantId,
             images,
             address,
+            latitude,
+            longitude,
             description,
             openingHours,
             createdBy: userId,

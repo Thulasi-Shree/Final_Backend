@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const crypto = require('crypto');
 const restaurantSchema = new mongoose.Schema({
 
   restaurantName: {
@@ -58,7 +59,8 @@ const restaurantSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
-  },pincode: {
+  },
+  pincode: {
     type: String,
     default: () => crypto.randomBytes(4).toString('hex'), 
 },
