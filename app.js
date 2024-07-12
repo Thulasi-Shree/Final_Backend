@@ -65,9 +65,9 @@ app.use(morgan('combined'));
   
 
 if(process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, '../Restaurant_Front_End/build')));
+    app.use(express.static(path.join(__dirname, '../app/build')));
     app.get('*', (req, res) =>{
-        res.sendFile(path.resolve(__dirname, '../Restaurant_Front_End/build/index.html'))
+        res.sendFile(path.resolve(__dirname, '../app/build/index.html'))
     })
 }
 app.use(errorMiddleware)
