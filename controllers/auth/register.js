@@ -6,6 +6,7 @@ const ErrorHandler = require('../../utils/errorHandler');
 const { sendVerificationEmail } = require('../../utils/email');
 const SuccessHandler = require('../../utils/successHandler');
 const CryptoJS = require('crypto-js');
+require('dotenv').config();
 
 exports.registerUser = catchAsyncError(async (req, res, next) => {
     const {
@@ -87,7 +88,7 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
                 emailVerificationStatus: false,
             }).lean(false);
         
-            if (userToDelete) {
+            if (userToDelete) { 
                 // Delete the user if not verified
                 await User.deleteOne({ _id: userToDelete._id });
                 console.log(`User ${userToDelete.email} deleted after 5 minutes.`);
