@@ -13,6 +13,10 @@ restaurantName: {
     type: String,
     required: true,
 },
+restaurantBranch: {
+  type: String,
+  required: true,
+},
 });
 
 const TimeSlot = mongoose.model('TimeSlot', timeSlotSchema);

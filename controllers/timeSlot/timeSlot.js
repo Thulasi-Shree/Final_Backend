@@ -4,12 +4,16 @@ const ErrorHandler = require('../../utils/errorHandler');
 
 const addAvailablePickupTimeSlots = catchAsyncError(async (req, res, next) => {
   try {
-    const { newTimeSlot, restaurantName, restaurantId } = req.body;
+    const { newTimeSlot, restaurantName, restaurantId, restaurantBranch } = req.body;
     if (!newTimeSlot || typeof newTimeSlot !== 'string') {
       return res.status(400).json({ success: false, error: 'Invalid time slot format' });
     }
 
-    const timeSlot = new TimeSlot({ slot: newTimeSlot, restaurantName, restaurantId  });
+    if (!restaurantName) {
+      return res.status(400).json({ success: false, error: 'Restaurant name is required' });
+    }
+
+    const timeSlot = new TimeSlot({ slot: newTimeSlot, restaurantName, restaurantId, restaurantBranch });
     await timeSlot.save();
 
     res.status(200).json({ success: true, message: 'New pickup time slot added successfully', timeSlot });
@@ -17,6 +21,7 @@ const addAvailablePickupTimeSlots = catchAsyncError(async (req, res, next) => {
     next(new ErrorHandler(error.message, 500));
   }
 });
+
 
 const getAllTimeSlots = catchAsyncError(async (req, res, next ) => {
     try {
