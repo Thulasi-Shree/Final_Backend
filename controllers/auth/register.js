@@ -73,7 +73,7 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
         const emailVerificationToken = user.generateEmailVerificationToken();
 
         await user.save();
-        let BASE_URL = process.env.FRONTEND_URL;
+        let BASE_URL = process.env.BACKEND_URL;
         if (process.env.NODE_ENV === 'production') {
             BASE_URL = `${req.protocol}://${req.get('host')}`;
         }
